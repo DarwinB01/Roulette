@@ -1,0 +1,77 @@
+package com.roulette.api;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.roulette.api.dto.BetDTO;
+import com.roulette.api.dto.OutputDTO;
+import com.roulette.api.model.Roulette;
+import com.roulette.api.repository.RepositoryMain;
+import com.roulette.api.service.ServiceBet;
+import com.roulette.api.util.Constants;
+
+/**
+ * Class that allows testing
+ * 
+ * @author Darwin Bonilla
+ * @version 1.0
+ *
+ */
+@ExtendWith(MockitoExtension.class)
+class RouletteApiApplicationTests {
+
+	@Mock
+	ServiceBet serviceBet;	
+	@Mock
+	HttpServletRequest servletRequest;
+	
+	@Mock
+	RepositoryMain repositoryMain;
+	
+	@Test
+	public void placeBet() {		
+		BetDTO betDTO = new BetDTO();
+		betDTO.setIdRoulette(1L);
+		betDTO.setIdUser(anyString());
+		OutputDTO esperado = new OutputDTO();
+		esperado.setOutputMessage(Constants.SUCCESS_OPERATION);
+		esperado.setStatusCode(Constants.STATUS_OK);
+//		OutputDTO actual = new OutputDTO();
+//		actual = serviceBet.placeBet(betDTO);
+//		assertEquals(esperado, actual);
+		
+		assertThat(serviceBet.isValidBet(betDTO));
+		
+	}
+	
+	@Test
+	public void saveBet() {
+	
+		BetDTO betDTO = new BetDTO();
+		betDTO.setIdRoulette(1L);
+		OutputDTO esperado = new OutputDTO();
+		esperado.setOutputMessage(Constants.SUCCESS_OPERATION);
+		esperado.setStatusCode(Constants.STATUS_OK);
+		OutputDTO actual = new OutputDTO();
+		actual = serviceBet.saveBet(betDTO);
+		assertEquals(esperado, actual);
+		
+	}
+
+}
